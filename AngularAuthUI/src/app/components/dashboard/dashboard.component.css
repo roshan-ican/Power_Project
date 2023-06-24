@@ -1,0 +1,11 @@
+.input-search {
+    flex-grow: 1;
+    /* Makes the input grow to fill the remaining space */
+}
+
+.btn-search {
+    width: auto;
+    /* Allows the button to adjust its width based on the content */
+    flex-shrink: 0;
+    /* Prevents the button from shrinking */
+}   

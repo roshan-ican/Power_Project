@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/angular_auth/config
+/.vs/angular_auth/FileContentIndex
+/AugularAuthAPI/.vs/AugularAuthAPI/FileContentIndex
+/AugularAuthAPI/bin/Debug/net6.0/AugularAuthAPI.dll
+/AugularAuthAPI/obj/Release/net6.0
+/.vs
+/AngularAuthUI/.vscode
+/AugularAuthAPI/.vs
+/AugularAuthAPI/bin/Debug/net6.0
+/AugularAuthAPI/obj
+*.user
+/AugularAuthAPI/Migrations
+/AngularAuthUI/.editorconfig
+/AngularAuthUI/.angular/cache/16.1.0
+/AngularAuthUI/node_modules
