@@ -12,7 +12,9 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class SignupComponent {
 
-  signup_form!: FormGroup 
+  signup_form!: FormGroup
+  consumerRegistrationSignup!: FormGroup
+
   constructor (private fb: FormBuilder, private auth: AuthService, private router: Router, private toast: NgToastService) {}
 
   ngOnInit(): void {
@@ -23,6 +25,15 @@ export class SignupComponent {
       email: ['', [Validators.required, Validators.pattern(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/)]],
       password: ['', Validators.required]
     });
+
+    this.consumerRegistrationSignup = this.fb.group ({
+      consumerFullName: ['', Validators.required],
+      consumerContractAccountNumber : [],
+      consumerMobileNumber : ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
+      consumerAddress: [],
+      consumerPassword : ['', Validators.required],
+      consumerRetypePassword : ['', Validators.required]
+    })
   }
   
 
@@ -60,6 +71,29 @@ export class SignupComponent {
       alert('invalid data entered')
     }
   }
+
+  onSubmittingConsumerRegistrationForm()
+  {
+    if (this.consumerRegistrationSignup.valid)
+    {
+      this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({
+        next: (res => {
+          this.consumerRegistrationSignup.reset();
+          this.toast.success({detail : "Sucessfully", summary: res.message, duration: 5000})
+          this.router.navigate(['login']);
+        }),
+        error: ((err:any) => {
+          this.toast.error({detail : 'ERROR', summary: err.error.message, duration: 5000})
+          // console.log(err.error.message)
+        })
+      })
+    }
+    else
+    {
+      this.validateAllFormFields(this.consumerRegistrationSignup);
+      alert("Please Provides Us Valid Entries");
+    }
+  }
   
   private validateAllFormFields(formGroup: FormGroup){
     Object.keys(formGroup.controls).forEach(field => {
@@ -72,6 +106,7 @@ export class SignupComponent {
       }
     })
   }
+  
   
 
 }

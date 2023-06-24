@@ -11,9 +11,12 @@ namespace AugularAuthAPI.Context
         }
         public DbSet<User> Users {get;  set;}
 
+        public DbSet<ConsumerRegistrationUsers> ConsumerRegistrationUsers { get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ConsumerRegistrationUsers>().ToTable("ConsumerRegistrationUsers");
             modelBuilder.Entity<User>().ToTable("users");
+
             //base.OnModelCreating(modelBuilder);  
         }
     }

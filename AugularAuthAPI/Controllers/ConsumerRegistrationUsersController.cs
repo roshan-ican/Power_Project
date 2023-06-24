@@ -39,7 +39,7 @@ namespace AugularAuthAPI.Controllers
                 //}
 
                 //checking here Consumer Mobile Number Existed or blank
-                if (ConsumerRegistrationUsersObj.ConsumerMobileNumber == 0)
+                if (ConsumerRegistrationUsersObj.ConsumerMobileNumber == "")
                 {
                     return BadRequest(new { Message = "Consumer Mobile Number Should not be Blank!!!" });
                 }
@@ -48,8 +48,12 @@ namespace AugularAuthAPI.Controllers
                     return BadRequest(new { Message = "Consumer Mobile Number Already Existed Found!!!" });
                 }
                 // checking Consuer Mobile number 10 digit or not
-                var CheckConsumerMobileNumberDigitTen = CheckConsumerMobileNumberDigitTenExistAsync(Convert.ToUInt32(ConsumerRegistrationUsersObj.ConsumerMobileNumber).ToString());
-                if (!string.IsNullOrEmpty(CheckConsumerMobileNumberDigitTen))
+                string CheckConsumerMobileNumberDigitTen = CheckConsumerMobileNumberDigitTenExistAsync(ConsumerRegistrationUsersObj.ConsumerMobileNumber);
+                //if (CheckConsumerMobileNumberDigitTen != "10")
+                //{
+                //    return BadRequest(new { Message = CheckConsumerMobileNumberDigitTen.ToString() });
+                //}
+                if (CheckConsumerMobileNumberDigitTen.Length > 10)
                 {
                     return BadRequest(new { Message = CheckConsumerMobileNumberDigitTen.ToString() });
                 }
@@ -86,21 +90,37 @@ namespace AugularAuthAPI.Controllers
         //{
         //    return await _authContext.ConsumerRegistrationUsers.AnyAsync(x => x.ConsumerFullName == ConsumerFullName);
         //}
-        private async Task<bool> CheckConsumerMobileNumberExistAsync(int ConsumerMobileNumber)
+        private async Task<bool> CheckConsumerMobileNumberExistAsync(string ConsumerMobileNumber)
         {
             return await _authContext.ConsumerRegistrationUsers.AnyAsync(x => x.ConsumerMobileNumber == ConsumerMobileNumber);
         }
-        private string CheckConsumerMobileNumberDigitTenExistAsync (string ConsumerMobileNumber)
+        //private int CheckConsumerMobileNumberDigitTenExistAsync (int ConsumerMobileNumber)
+        //{
+        //    StringBuilder stringBuilder = new StringBuilder();
+        //    if (!Regex.IsMatch(Convert.ToInt32(ConsumerMobileNumber).ToString(), "[0-9]"))
+        //    {
+        //        stringBuilder.Append("Consumer Mobile Number Should be Integer Characters" + Environment.NewLine);
+        //    }
+        //    if (Convert.ToInt32(ConsumerMobileNumber).ToString().Length < 10)
+        //    {
+        //        stringBuilder.Append("Minimum Consumer Mobile Number length should be at least 10 Integer");
+        //    }
+        //    return Convert.ToInt32(stringBuilder);
+        //}
+        private string CheckConsumerMobileNumberDigitTenExistAsync(string consumerMobileNumber)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            if (!Regex.IsMatch(ConsumerMobileNumber, "[0-9]"))
+
+            if (!Regex.IsMatch(consumerMobileNumber.ToString(), "^[0-9]+$"))
             {
-                stringBuilder.Append("Consumer Mobile Number Should be Integer Characters" + Environment.NewLine);
+                stringBuilder.Append("Consumer Mobile Number should only contain numeric characters." + Environment.NewLine);
             }
-            if (ConsumerMobileNumber.Length < 10)
+
+            if (consumerMobileNumber.ToString().Length < 10)
             {
-                stringBuilder.Append("Minimum Consumer Mobile Number length should be at least 10 Integer");
+                stringBuilder.Append("Minimum Consumer Mobile Number length should be at least 10 digits.");
             }
+
             return stringBuilder.ToString();
         }
         private string CheckConsumerPasswordLengthStrengthAsync (string ConsumerPassword)

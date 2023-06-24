@@ -9,12 +9,19 @@ import {JwtHelperService} from "@auth0/angular-jwt"
 })
 export class AuthService {
 
-  private baseUrl:string = "https://localhost:7017/api/User/"
+  private baseUrl:string = "https://localhost:44378/api/User/"
+  private secondbaseUrl : string = "https://localhost:44378/api/ConsumerRegistrationUsers/"
+
   private userPayload: any;
 
   constructor(private http: HttpClient, private router: Router) {
     this.userPayload = this.decodedToken();
    }
+
+   onSubmittingConsumerRegistrationFormsignUp(ConsumerRegistrationForms:any) {
+    return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User`, ConsumerRegistrationForms)
+  }
+
 
   signUp(userObj:any) {
     return this.http.post<any>(`${this.baseUrl}register`, userObj)
