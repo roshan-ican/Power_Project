@@ -12,10 +12,15 @@
 
         <a class="navbar-brand">AUTH</a>
         <div>
-            <h4>Hello, {{fullName}}</h4>
+            <i class="fa fa-user mr-2"></i>
+            <span
+                class="mt-0 inline-grid items-center justify-center md:justify-center rounded-full">Hello,
+                {{fullName}} <button class="btn btn-primary w-full" (click)="logout()">Logout</button>
+            </span>
         </div>
     </div>
-   
+
+
 </nav>
 
 

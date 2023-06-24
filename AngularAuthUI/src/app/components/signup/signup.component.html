@@ -119,21 +119,16 @@
 
               <div class="form-group pt-3">
                 <div class="input-field"
-                  [class.error]="consumerRegistrationSignup.get('consumerMobileNumber')?.dirty && consumerRegistrationSignup.get('consumerMobileNumber')?.hasError('required')">
+                  [class.error]="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && consumerRegistrationSignup.hasError('required', 'consumerMobileNumber')">
                   <span class="fa fa-user p-2"></span>
                   <input formControlName="consumerMobileNumber" type="tel" placeholder="Consumer Mobile Number *"
                     class="rounded w-full focus:ring form-control form-control-sm" />
                 </div>
               </div>
 
-              <!-- <small
+              <small
                 *ngIf="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && consumerRegistrationSignup.hasError('required', 'consumerMobileNumber')"
                 class="text-danger">*Consumer Mobile Number is required
-              </small> -->
-              <small
-                *ngIf="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && (consumerRegistrationSignup.controls['consumerMobileNumber'].hasError('required') || !consumerRegistrationSignup.get('consumerMobileNumber')?.errors?.['pattern'])"
-                class="text-danger">
-                *Consumer Mobile Number is required and should be a 10-digit number
               </small>
 
               <div class="form-group pt-3">
