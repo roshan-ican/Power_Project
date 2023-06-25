@@ -80,16 +80,6 @@
             </form> -->
             <form [formGroup]="consumerRegistrationSignup">
 
-              <!-- <div class="form-group pt-3">
-                <div class="input-field"
-                  [class.error]="signup_form.controls['firstname'].dirty && signup_form.hasError('required', 'firstname')">
-                  <span class="fa fa-user p-2"></span>
-                  <input formControlName="firstname" type="text" placeholder="First Name">
-                </div>
-              </div>
-              <small *ngIf="signup_form.controls['firstname'].dirty && signup_form.hasError('required', 'firstname')"
-                class="text-danger">*First name is required</small> -->
-
               <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="consumerRegistrationSignup.controls['consumerFullName'].dirty && consumerRegistrationSignup.hasError('required', 'consumerFullName')">
@@ -106,7 +96,8 @@
               <div class="form-group pt-3 ">
                 <div class="input-field "
                   [class.error]="consumerRegistrationSignup.controls['consumerContractAccountNumber'].dirty && consumerRegistrationSignup.hasError('required', 'consumerContractAccountNumber')">
-                  <span class="fa fa-user p-2"> </span>
+                  <span class="fa fa-server p-2"> </span>
+
                   <input formControlName="consumerContractAccountNumber" type="text"
                     placeholder="Contract Account Number (Optional)"
                     class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
@@ -119,22 +110,29 @@
 
               <div class="form-group pt-3">
                 <div class="input-field"
-                  [class.error]="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && consumerRegistrationSignup.hasError('required', 'consumerMobileNumber')">
-                  <span class="fa fa-user p-2"></span>
-                  <input formControlName="consumerMobileNumber" type="tel" placeholder="Consumer Mobile Number *"
+                  [class.error]="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && (consumerRegistrationSignup.hasError('required', 'consumerMobileNumber'))">
+                  <span class="fa fa-mobile p-2"></span>
+                  <input formControlName="consumerMobileNumber" minlength="10" maxlength="10" type="tel"
+                    placeholder="Consumer Mobile Number *"
                     class="rounded w-full focus:ring form-control form-control-sm" />
                 </div>
               </div>
-
               <small
                 *ngIf="consumerRegistrationSignup.controls['consumerMobileNumber'].dirty && consumerRegistrationSignup.hasError('required', 'consumerMobileNumber')"
-                class="text-danger">*Consumer Mobile Number is required
-              </small>
+                class="text-danger">*Consumer Mobile Number is required</small>
+              <small
+                *ngIf="consumerRegistrationSignup.controls['consumerMobileNumber'].invalid && consumerRegistrationSignup.hasError('pattern','consumerMobileNumber')"
+                class="text-danger">*Please enter a valid 10-digit Mobile Number</small>
+
+              <!-- <small *ngIf="consumerRegistrationSignup.controls['consumerMobileNumber'].invalid"
+                class="text-danger">*Consumer Mobile Number must be a 10-digit integer</small> -->
+
+
 
               <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="consumerRegistrationSignup.controls['consumerAddress'].dirty && consumerRegistrationSignup.hasError('required', 'consumerAddress')">
-                  <span class="fa fa-user p-2"> </span>
+                  <span class="fa fa-location-arrow p-2"> </span>
                   <input formControlName="consumerAddress" type="text" placeholder="Address (Optional)"
                     class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
                 </div>
@@ -144,13 +142,25 @@
                 class="text-danger">*Consumer Address is required
               </small>
 
+              <!-- <div class="form-group pt-3">
+                <div class="input-field"
+                  [class.error]="consumerRegistrationSignup.controls['consumerPassword'].dirty && consumerRegistrationSignup.hasError('required', 'password')">
+                  <span class="fa fa-lock p-2"></span>
+                  <input formControlName="password" [type]="type" placeholder="Password">
+                  <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                </div>
+              </div>
+              <small *ngIf="signup_form.controls['password'].dirty && signup_form.hasError('required', 'password')"
+                class="text-danger">*Password is required</small> -->
+
 
               <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="consumerRegistrationSignup.controls['consumerPassword'].dirty && consumerRegistrationSignup.hasError('required', 'consumerPassword')">
-                  <span class="fa fa-user p-2"> </span>
-                  <input formControlName="consumerPassword" type="text" placeholder="Password *"
+                  <span class="fa fa-lock p-2"> </span>
+                  <input formControlName="consumerPassword" [type]="type" placeholder="Password *"
                     class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
+                  <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
                 </div>
               </div>
               <small
@@ -161,7 +171,27 @@
               <div class="form-group pt-3">
                 <div class="input-field"
                   [class.error]="consumerRegistrationSignup.controls['consumerRetypePassword'].dirty && consumerRegistrationSignup.hasError('required', 'consumerRetypePassword')">
-                  <span class="fa fa-user p-2"> </span>
+                  <span class="fa fa-lock p-2"></span>
+                  <input formControlName="consumerRetypePassword" [type]="type" placeholder="Re-Type Password *"
+                    class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
+                  <span (click)="hideShowPass()" class="fa {{eyeIcon}}"></span>
+                </div>
+              </div>
+              <small *ngIf="consumerRegistrationSignup.controls['consumerRetypePassword'].dirty && 
+                             consumerRegistrationSignup.hasError('required', 'consumerRetypePassword')"
+                class="text-danger">*Consumer Re-Type Password is required
+              </small>
+
+              <small
+                *ngIf="consumerRegistrationSignup.get('consumerPassword')?.value != consumerRegistrationSignup.get('consumerRetypePassword')?.value"
+                class="text-danger">
+                *Consumer Password is not Matching
+              </small>
+
+              <!-- <div class="form-group pt-3">
+                <div class="input-field"
+                  [class.error]="consumerRegistrationSignup.controls['consumerRetypePassword'].dirty && consumerRegistrationSignup.hasError('required', 'consumerRetypePassword')">
+                  <span class="fa fa-lock p-2"> </span>
                   <input formControlName="consumerRetypePassword" type="text" placeholder="Re-Type Password *"
                     class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
                 </div>
@@ -169,7 +199,7 @@
               <small
                 *ngIf="consumerRegistrationSignup.controls['consumerRetypePassword'].dirty && consumerRegistrationSignup.hasError('required', 'consumerRetypePassword')"
                 class="text-danger">*Consumer Re-Type Password is required
-              </small>
+              </small> -->
 
 
 
