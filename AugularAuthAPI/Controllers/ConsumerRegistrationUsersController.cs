@@ -169,11 +169,20 @@ namespace AugularAuthAPI.Controllers
 
                 consumerRegisteredId.CousumerToken = CreateJwt(consumerRegisteredId);
 
+                consumerRegisteredId.CousumerToken = CreateJwt(consumerRegisteredId);
+                var newAccessToken = consumerRegisteredId.CousumerToken;
+                var newRefreshToken = CreateRefreshToken();
+                consumerRegisteredId.RefreshToken = newAccessToken;
+                consumerRegisteredId.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
+                await _authContext.SaveChangesAsync();
+
                 // If the user is found, return a successful response indicating successful login
-                return Ok(new
+                return Ok(new TokenApiDto()
                 {
-                    Token = consumerRegisteredId.CousumerToken,
-                    Message = "Login Successfully with ConsumerRegistered UserID " + consumerRegisteredId.ConsumerMobileNumber
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken
+                    //Token = consumerRegisteredId.CousumerToken,
+                    //Message = "Login Successfully with ConsumerRegistered UserID " + consumerRegisteredId.ConsumerMobileNumber
                 });
             }
             catch (Exception ex)
@@ -220,7 +229,7 @@ namespace AugularAuthAPI.Controllers
             {
                 //new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
                 new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
-                new Claim(ClaimTypes.MobilePhone, consumerRegistrationUsers.ConsumerMobileNumber),
+                new Claim(ClaimTypes.Name, $"{consumerRegistrationUsers.ConsumerMobileNumber}"),
 
             });
 
