@@ -1,9 +1,14 @@
 ﻿using AugularAuthAPI.Context;
 using AugularAuthAPI.Helpers;
 using AugularAuthAPI.Models;
+using AugularAuthAPI.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Formats.Asn1;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -33,10 +38,7 @@ namespace AugularAuthAPI.Controllers
                 {
                     return BadRequest(new { Message = "Consumer Full Name Should not be Blank!!!" });
                 }
-                //if (await CheckConsumerFullNameExistAsync(ConsumerRegistrationUsersObj.ConsumerFullName))
-                //{
-                //    return BadRequest(new { Message = "Consumer FullName Alread Existed Found!!!" });
-                //}
+     
 
                 //checking here Consumer Mobile Number Existed or blank
                 if (ConsumerRegistrationUsersObj.ConsumerMobileNumber == "")
@@ -49,10 +51,7 @@ namespace AugularAuthAPI.Controllers
                 }
                 // checking Consuer Mobile number 10 digit or not
                 string CheckConsumerMobileNumberDigitTen = CheckConsumerMobileNumberDigitTenExistAsync(ConsumerRegistrationUsersObj.ConsumerMobileNumber);
-                //if (CheckConsumerMobileNumberDigitTen != "10")
-                //{
-                //    return BadRequest(new { Message = CheckConsumerMobileNumberDigitTen.ToString() });
-                //}
+    
                 if (CheckConsumerMobileNumberDigitTen.Length > 10)
                 {
                     return BadRequest(new { Message = CheckConsumerMobileNumberDigitTen.ToString() });
@@ -86,27 +85,12 @@ namespace AugularAuthAPI.Controllers
                 throw ex;
             }
         }
-        //private async Task<bool> CheckConsumerFullNameExistAsync(string ConsumerFullName)
-        //{
-        //    return await _authContext.ConsumerRegistrationUsers.AnyAsync(x => x.ConsumerFullName == ConsumerFullName);
-        //}
+
         private async Task<bool> CheckConsumerMobileNumberExistAsync(string ConsumerMobileNumber)
         {
             return await _authContext.ConsumerRegistrationUsers.AnyAsync(x => x.ConsumerMobileNumber == ConsumerMobileNumber);
         }
-        //private int CheckConsumerMobileNumberDigitTenExistAsync (int ConsumerMobileNumber)
-        //{
-        //    StringBuilder stringBuilder = new StringBuilder();
-        //    if (!Regex.IsMatch(Convert.ToInt32(ConsumerMobileNumber).ToString(), "[0-9]"))
-        //    {
-        //        stringBuilder.Append("Consumer Mobile Number Should be Integer Characters" + Environment.NewLine);
-        //    }
-        //    if (Convert.ToInt32(ConsumerMobileNumber).ToString().Length < 10)
-        //    {
-        //        stringBuilder.Append("Minimum Consumer Mobile Number length should be at least 10 Integer");
-        //    }
-        //    return Convert.ToInt32(stringBuilder);
-        //}
+
         private string CheckConsumerMobileNumberDigitTenExistAsync(string consumerMobileNumber)
         {
             StringBuilder stringBuilder = new StringBuilder();
@@ -158,6 +142,127 @@ namespace AugularAuthAPI.Controllers
             }
 
             return stringBuilder.ToString();
+        }
+        [HttpPost("Consumer-Registration-User-Authenticate")]
+        public async Task<IActionResult> ConsumerRegistrationUserAuthenticate([FromBody] ConsumerRegistrationUsers consumerRegistrationUsersObj)
+        {
+            try
+            {
+                Console.WriteLine(consumerRegistrationUsersObj);
+                if (consumerRegistrationUsersObj == null)
+                {
+                    return BadRequest();
+                }
+                var consumerRegisteredId = await _authContext.ConsumerRegistrationUsers.FirstOrDefaultAsync(x => x.ConsumerMobileNumber == consumerRegistrationUsersObj.ConsumerMobileNumber);
+                Console.WriteLine(consumerRegisteredId);
+                // If no user is found, return a "User Not Found" response
+                if (consumerRegisteredId == null)
+                {
+                    return NotFound(new { message = "Consumer User Not Found!" });
+                }
+
+                if (!PasswordHasher.VerifyPassword(consumerRegistrationUsersObj.ConsumerPassword, consumerRegisteredId.ConsumerPassword))
+                {
+                    return BadRequest(new { Message = "Consumer Password is Incorrect" });
+                }
+
+                consumerRegisteredId.CousumerToken = CreateJwt(consumerRegisteredId);
+
+                // If the user is found, return a successful response indicating successful login
+                return Ok(new
+                {
+                    Token = consumerRegisteredId.CousumerToken,
+                    Message = "Login Successfully with ConsumerRegistered UserID " + consumerRegisteredId.ConsumerMobileNumber
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var key = Encoding.ASCII.GetBytes("veryverysecret.....");
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateLifetime = false,
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("This is a invalid Token");
+            return principal;
+        }
+        private string CreateRefreshToken()
+        {
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var refreshToken = Convert.ToBase64String(tokenBytes);
+            var tokenInUser = _authContext.ConsumerRegistrationUsers.Any(a => a.RefreshToken == refreshToken);
+            if (tokenInUser)
+            {
+                return CreateRefreshToken();
+            }
+            return refreshToken;
+
+        }
+        private string CreateJwt(ConsumerRegistrationUsers consumerRegistrationUsers)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("veryverysecret.....");
+            var identity = new ClaimsIdentity(new Claim[]
+            {
+                //new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
+                new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
+                new Claim(ClaimTypes.MobilePhone, consumerRegistrationUsers.ConsumerMobileNumber),
+
+            });
+
+            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = identity,
+                Expires = DateTime.Now.AddSeconds(10),
+                SigningCredentials = credentials,
+            };
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            return jwtTokenHandler.WriteToken(token);
+        }
+        [HttpGet]
+        public async Task<ActionResult<ConsumerRegistrationUsers>> GetAllUsers()
+        {
+            return Ok(await _authContext.ConsumerRegistrationUsers.ToListAsync());
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh(TokenApiDto tokenApiDto)
+        {
+            if (tokenApiDto == null)
+                return BadRequest("Invalid Client Request");
+            string accessToken = tokenApiDto.AccessToken;
+            string refreshToken = tokenApiDto?.RefreshToken;
+            var principal = GetPrincipalFromExpiredToken(accessToken);
+
+            var username = principal.Identity.Name;
+            Console.WriteLine(username);
+            var user = await _authContext.ConsumerRegistrationUsers.FirstOrDefaultAsync(u => u.ConsumerMobileNumber == username);
+            if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+                return BadRequest("Invalid Request");
+            var newAccessToken = CreateJwt(user);
+            var newRefreshToken = CreateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            await _authContext.SaveChangesAsync();
+            return Ok(new TokenApiDto()
+            {
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
+            });
         }
     }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http"
 import { Router } from '@angular/router';
 import {JwtHelperService} from "@auth0/angular-jwt"
+import { TokenApiModel } from '../models/token-api.model';
 
 
 @Injectable({
@@ -21,6 +22,10 @@ export class AuthService {
    onSubmittingConsumerRegistrationFormsignUp(ConsumerRegistrationForms:any) {
     return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User`, ConsumerRegistrationForms)
   }
+  onSubmittingConsumerRegistrationFormsLogin(ConsumerRegistrationFormsloginObj: any[])
+  {
+    return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User-Authenticate`, ConsumerRegistrationFormsloginObj)
+  }
 
 
   signUp(userObj:any) {
@@ -35,11 +40,17 @@ export class AuthService {
     this.router.navigate(['login'])
 
   }
-  storeToken(tokenValue: string) {
-    localStorage.setItem('token', tokenValue)
+  storeToken(token: string): void {
+    localStorage.setItem('token', token);
+  }
+  storeRefreshToken(tokenValue:string){
+    localStorage.setItem('refreshToken', tokenValue)
   }
   getToken(){
     return localStorage.getItem('token')
+  }
+  getRefreshToken() {
+    localStorage.getItem('refreshToken')
   }
 
   isLoggedIn(): boolean {
@@ -59,6 +70,10 @@ export class AuthService {
   getRoleFromToken(){
     if(this.userPayload)
     return this.userPayload.role;
+  }
+
+  renewToken(tokenApi: TokenApiModel){
+    return this.http.post<any>(`${this.baseUrl}refresh`, tokenApi)
   }
 
 }

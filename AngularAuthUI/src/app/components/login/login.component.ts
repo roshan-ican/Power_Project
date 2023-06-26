@@ -14,6 +14,7 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 export class LoginComponent {
 
   loginForm!: FormGroup;
+  consumerRegistrationlogin!: FormGroup;
 
   constructor(private fb: FormBuilder,
     private auth: AuthService,
@@ -28,6 +29,10 @@ export class LoginComponent {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+    this.consumerRegistrationlogin = this.fb.group({
+      ConsumerMobileNumber: ['', Validators.required],
+      ConsumerPassword: ['', Validators.required]
+    })
   }
 
   type: string = "password";
@@ -50,16 +55,17 @@ export class LoginComponent {
         next: (res) => {
           console.log(res.message);
           this.loginForm.reset();
-          this.auth.storeToken(res.token)
+          this.auth.storeToken(res.accessToken)
+          this.auth.storeRefreshToken(res.refreshToken)
           const tokenPayload = this.auth.decodedToken()
           this.userStore.setFullNameForStore(tokenPayload.name)
           this.userStore.setFullNameForStore(tokenPayload.role)
-          this.toast.success({detail: "SUCCESS", summary:res.message, duration: 4000})
+          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
           // alert(err?.error.message);
-          this.toast.error({detail: "ERROR", summary: "Something went wrong", duration: 4000})
+          this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })
           console.log(err);
         }
       });
@@ -67,6 +73,34 @@ export class LoginComponent {
     // If the form is invalid, show an error message and mark required fields as dirty
     else {
       this.validateAllFormFields(this.loginForm);
+      alert('The form is invalid');
+    }
+  }
+  onConsumerRegistratedUserLogin() {
+    if (this.consumerRegistrationlogin.valid) {
+      this.auth.onSubmittingConsumerRegistrationFormsLogin(this.consumerRegistrationlogin.value).subscribe({
+        next: (res) => {
+          console.log(res, 'RESPONSE');
+          this.consumerRegistrationlogin.reset();
+          this.auth.storeToken(res.token)
+          this.auth.storeRefreshToken(res.refreshToken)
+          
+          console.log(this.auth.storeToken(res.tokenValue));
+          
+          const tokenPayload = this.auth.decodedToken();
+          this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
+          this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerRole)
+          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
+          this.router.navigate(['dashboard'])
+        },
+        error: (err) => {
+          // alert(err?.error.message);
+          this.toast.error({ detail: "ERROR", summary: err + "Something went wrong", duration: 4000 })
+        }
+      })
+    }
+    else {
+      this.validateAllFormFields(this.consumerRegistrationlogin);
       alert('The form is invalid');
     }
   }

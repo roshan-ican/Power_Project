@@ -10,16 +10,16 @@ import { UserStoreService } from 'src/app/services/user-store.service';
 })
 export class DashboardComponent {
   public users: any = [];
-  public role!:string;
+  public role!: string;
 
-  public fullName : string = ""
-  constructor(private api: ApiService, private auth: AuthService, private userStore: UserStoreService ) { }
+  public fullName: string = ""
+  constructor(private api: ApiService, private auth: AuthService, private userStore: UserStoreService) { }
 
   ngOnInit() {
     this.api.getUsers()
-    .subscribe(res => {
-      this.users = res;
-    })
+      .subscribe(res => {
+        this.users = res;
+      })
     this.userStore.getFullNameFromStore().subscribe(val => {
       let fullNameFromToken = this.auth.getfullnameFromToken();
       this.fullName = val || fullNameFromToken

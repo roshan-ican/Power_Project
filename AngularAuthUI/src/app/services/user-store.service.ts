@@ -9,6 +9,26 @@ export class UserStoreService {
   private fullName$ = new BehaviorSubject<string>("");
   private role$ = new BehaviorSubject<string>("");
 
+  private consumerUserId$ = new BehaviorSubject<string>("");
+  private consumerRole$ = new BehaviorSubject<string>("");
+
+  public getConsumerRoleFromStore()
+  {
+    return this.consumerRole$.asObservable();
+  }
+  public setConsumerRoleForStore (role: any)
+  {
+    this.consumerRole$.next(role);
+  }
+  public getConsumerUserIdFromStore()
+  {
+    return this.consumerUserId$.asObservable();
+  }
+  public setConsumerUserIdFromStore(consumerUserId: any)
+  {
+    return this.consumerUserId$.next(consumerUserId)
+  }
+
   constructor() { }
 
   public getRoleFromStore(){
