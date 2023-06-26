@@ -50,10 +50,8 @@ export class LoginComponent {
   onLogin() {
     // If the form is valid, send the loginForm value to the server
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
       this.auth.login(this.loginForm.value).subscribe({
         next: (res) => {
-          console.log(res.message);
           this.loginForm.reset();
           this.auth.storeToken(res.accessToken)
           this.auth.storeRefreshToken(res.refreshToken)
@@ -65,8 +63,7 @@ export class LoginComponent {
         },
         error: (err) => {
           // alert(err?.error.message);
-          this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })
-          console.log(err);
+          this.toast.error({ detail: "ERROR", summary: err.message + "Something went wrong", duration: 4000 })
         }
       });
     }
@@ -80,16 +77,10 @@ export class LoginComponent {
     if (this.consumerRegistrationlogin.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsLogin(this.consumerRegistrationlogin.value).subscribe({
         next: (res) => {
-          console.log("Responded" , res);
-          // this.consumerRegistrationlogin.reset();
-          this.auth.storeToken(res.token)
+          this.consumerRegistrationlogin.reset();
+          this.auth.storeToken(res.accessToken)
           this.auth.storeRefreshToken(res.refreshToken)
-          
-          console.log(this.auth.storeToken(res.tokenValue));
-          
           const tokenPayload = this.auth.decodedToken();
-          console.log(tokenPayload);
-          
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
           this.userStore.setConsumerRoleForStore(tokenPayload.ConsumerRole)
           this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })

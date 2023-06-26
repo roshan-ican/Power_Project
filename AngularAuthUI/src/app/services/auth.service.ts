@@ -40,23 +40,27 @@ export class AuthService {
     this.router.navigate(['login'])
 
   }
-  storeToken(token: string): void {
-    localStorage.setItem('token', token);
+  storeToken(accessToken: string): void {
+    localStorage.setItem('accessToken', accessToken);
   }
   storeRefreshToken(tokenValue:string){
     localStorage.setItem('refreshToken', tokenValue)
   }
   getToken(){
-    return localStorage.getItem('token')
+    return localStorage.getItem('accessToken')
   }
   getRefreshToken() {
     localStorage.getItem('refreshToken')
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('token')
+    return !!localStorage.getItem('accessToken')
   }
   decodedToken() {
+    // const jwtHelper = new JwtHelperService()
+    // const token = this.getToken()!;
+    // return  jwtHelper.decodeToken(token)
+
     const jwtHelper = new JwtHelperService()
     const token = this.getToken()!;
     console.log(token)
