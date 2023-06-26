@@ -59,6 +59,7 @@ export class AuthService {
   decodedToken() {
     const jwtHelper = new JwtHelperService()
     const token = this.getToken()!;
+    console.log(token)
     console.log(jwtHelper.decodeToken(token));
     return  jwtHelper.decodeToken(token)
   }

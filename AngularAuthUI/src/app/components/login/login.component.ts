@@ -80,14 +80,16 @@ export class LoginComponent {
     if (this.consumerRegistrationlogin.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsLogin(this.consumerRegistrationlogin.value).subscribe({
         next: (res) => {
-          console.log(res, 'RESPONSE');
-          this.consumerRegistrationlogin.reset();
+          console.log("Responded" , res);
+          // this.consumerRegistrationlogin.reset();
           this.auth.storeToken(res.token)
           this.auth.storeRefreshToken(res.refreshToken)
           
           console.log(this.auth.storeToken(res.tokenValue));
           
           const tokenPayload = this.auth.decodedToken();
+          console.log(tokenPayload);
+          
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerRole)
           this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
@@ -95,7 +97,7 @@ export class LoginComponent {
         },
         error: (err) => {
           // alert(err?.error.message);
-          this.toast.error({ detail: "ERROR", summary: err + "Something went wrong", duration: 4000 })
+          this.toast.error({ detail: "ERROR", summary: err.message + "Something went wrong", duration: 4000 })
         }
       })
     }
