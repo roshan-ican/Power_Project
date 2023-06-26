@@ -89,7 +89,7 @@ export class LoginComponent {
           
           const tokenPayload = this.auth.decodedToken();
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
-          this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerRole)
+          this.userStore.setConsumerRoleForStore(tokenPayload.ConsumerRole)
           this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
           this.router.navigate(['dashboard'])
         },

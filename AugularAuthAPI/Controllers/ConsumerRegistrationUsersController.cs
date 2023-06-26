@@ -2,6 +2,7 @@
 using AugularAuthAPI.Helpers;
 using AugularAuthAPI.Models;
 using AugularAuthAPI.Models.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -234,6 +235,7 @@ namespace AugularAuthAPI.Controllers
             var token = jwtTokenHandler.CreateToken(tokenDescriptor);
             return jwtTokenHandler.WriteToken(token);
         }
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<ConsumerRegistrationUsers>> GetAllUsers()
         {

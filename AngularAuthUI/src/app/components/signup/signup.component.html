@@ -100,7 +100,7 @@
               <small *ngIf="consumerRegistrationSignup.controls['consumerRetypePassword'].dirty && 
                              consumerRegistrationSignup.hasError('required', 'consumerRetypePassword')"
                 class="text-danger">*Consumer Re-Type Password is required
-              </small> -->
+              </small> 
 
               <small
                 *ngIf="consumerRegistrationSignup.get('consumerPassword')?.value != consumerRegistrationSignup.get('consumerRetypePassword')?.value"
