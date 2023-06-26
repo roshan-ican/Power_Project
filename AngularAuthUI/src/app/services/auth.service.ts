@@ -69,6 +69,7 @@ export class AuthService {
   }
   getfullnameFromToken() {
     if(this.userPayload)
+    console.log(this.userPayload, 'MAAL');
     return this.userPayload.name;
   }
 

@@ -56,6 +56,64 @@
     </div>
 
 </ng-container>
+<ng-container *ngIf="role === 'ConsumerRole'" class="bg-blue-600">
+
+    <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer">
+        <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
+    </span>
+    <div class="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+        <div class="text-gray-100 text-xl">
+            <div class="p-2.5 mt-1 flex items-center">
+                <i class="px-2 py-1 rounded-full bg-white flex items-center justify-center w-12 h-12">
+                    <img src="https://identityssoui.tourgenie.biz/Images/logo.png" class="w-full" alt="Sikkim Power">
+                </i>
+                <h1 class="font-bold text-white text-[15px] ml-3">Sikkim Power</h1>
+                <i class="bi bi-x cursor-pointer ml-28 lg:hidden"></i>
+            </div>
+
+        </div>
+
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-house-door-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold">Dasboard</span>
+        </div>
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-bookmark-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold">Downloads & Pay bills</span>
+        </div>
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-bookmark-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold">General query and complaint</span>
+        </div>
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-bookmark-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold">Notification & Press Realease</span>
+        </div>
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-bookmark-fill"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold">Help Desk</span>
+        </div>
+
+
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold" (click)="logout()">Logout</span>
+        </div>
+
+        <div
+            class="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <i class="bi bi-box-arrow-in-right"></i>
+            <span class="text-[15px] ml-4 text-gray-200 font-bold" (click)="logout()">Consumer Login / Sign up</span>
+        </div>
+    </div>
+
+</ng-container>
 
 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-2" >
     <header class="navbar sticky-top flex-md-nowrap p-0 shadow" style="background-color: #111827;">
@@ -121,19 +179,19 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Firstname</th>
-                                <th scope="col">Lastname</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">Email</th>
+                                <th scope="col">Consumer FullName</th>
+                                <th scope="col">Consumer ContractAccountNumber</th>
+                                <th scope="col">Consumer MobileNumber</th>
+                                <th scope="col">Consumer Role</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let user of users; let i= index">
-                                <td>{{i+1}}</td>
-                                <td>{{user.firstName}}</td>
-                                <td>{{user.lastName}}</td>
-                                <td>{{user.username}}</td>
-                                <td>{{user.email}}</td>
+                                <td>{{user.consumerRegistrationId}}</td>
+                                <td>{{user.consumerFullName}}</td>
+                                <td>{{user.consumerContractAccountNumber}}</td>
+                                <td>{{user.consumerMobileNumber}}</td>
+                                <td>{{user.consumerRole}}</td>
                             </tr>
 
                         </tbody>

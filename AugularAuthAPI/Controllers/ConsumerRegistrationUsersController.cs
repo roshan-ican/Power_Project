@@ -229,7 +229,8 @@ namespace AugularAuthAPI.Controllers
             {
                 //new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
                 new Claim(ClaimTypes.Role, consumerRegistrationUsers.ConsumerRole),
-                new Claim(ClaimTypes.Name, $"{consumerRegistrationUsers.ConsumerMobileNumber}"),
+                new Claim(ClaimTypes.MobilePhone, $"{consumerRegistrationUsers.ConsumerMobileNumber}"),
+                new Claim(ClaimTypes.Name, $"{consumerRegistrationUsers.ConsumerFullName}")
 
             });
 

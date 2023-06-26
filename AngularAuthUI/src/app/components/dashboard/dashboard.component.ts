@@ -16,9 +16,10 @@ export class DashboardComponent {
   constructor(private api: ApiService, private auth: AuthService, private userStore: UserStoreService) { }
 
   ngOnInit() {
-    this.api.getUsers()
+    this.api.getCustomerUsers()
       .subscribe(res => {
         this.users = res;
+        console.log(res,"MAAL");
       })
     this.userStore.getFullNameFromStore().subscribe(val => {
       let fullNameFromToken = this.auth.getfullnameFromToken();
