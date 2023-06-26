@@ -38,7 +38,6 @@ export class SignupComponent {
   
 
 
-
   type: string = "password"
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash"
@@ -47,6 +46,12 @@ export class SignupComponent {
     this.isText ? this.eyeIcon = "fa-eye" : this.eyeIcon = "fa-eye-slash"
     this.isText ? this.type = "text" : this.type = "password"
   }
+
+
+
+  
+
+  
 
   onSignUp() {
     // if the form is valid, send the object to the database
@@ -83,8 +88,7 @@ export class SignupComponent {
           this.router.navigate(['login']);
         }),
         error: ((err:any) => {
-          this.toast.error({detail : 'ERROR', summary: err.error.message, duration: 5000})
-          // console.log(err.error.message)
+          this.toast.error({detail : 'Warning', summary: "Something went wrong", duration: 5000})
         })
       })
     }
