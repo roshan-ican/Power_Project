@@ -45,6 +45,7 @@
                                 *ngIf="consumerRegistrationlogin.controls['ConsumerPassword'].dirty && consumerRegistrationlogin.hasError('required', 'ConsumerPassword')"
                                 class="text-danger">*Consumer Password is required
                             </small>
+                            
                             <div class="form-inline fr mt-4">
                                 <a id="forget" data-bs-toggle="modal" data-bs-target="#modal"
                                     class="font-weight-bold">Forget Password ?</a>
@@ -54,8 +55,11 @@
                                 Login
                             </button>
 
-                            <div class="text-center pt-4 text-muted">Don't have an account ?
-                                <a id="signup" routerLink="/signup">Sign Up</a>
+                            <div class="text-center pt-4 text-muted">
+                                <a id="signup" routerLink="/account-for-new-connection-signup">Application for New Connection</a>
+                            </div>
+                            <div class="text-center pt-4 text-muted">
+                                <a id="signup" routerLink="/account-create-signup">Create Account</a>
                             </div>
                         </form>
                     </div>

@@ -8,6 +8,7 @@ namespace AugularAuthAPI.Models
         public int ConsumerRegistrationId { get; set; }
         public string? ConsumerFullName { get; set; }
         public string? ConsumerContractAccountNumber { get; set; }
+        public string? ConsumerMeterNumber { get; set; }
         public string? ConsumerMobileNumber { get; set; }
         public string? ConsumerAddress { get; set; }
         public string? ConsumerPassword { get; set; }

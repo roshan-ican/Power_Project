@@ -10,13 +10,17 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NgToastModule } from 'ng-angular-popup' // to be added
 import { TokenInterceptor } from './interceptors/token.interceptor';
+import { AccountForNewConnectionSignupComponent } from './components/account-for-new-connection-signup/account-for-new-connection-signup.component';
+import { AccountCreateSignupComponent } from './components/account-create-signup/account-create-signup.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    AccountForNewConnectionSignupComponent,
+    AccountCreateSignupComponent
   ],
   imports: [
     BrowserModule,
