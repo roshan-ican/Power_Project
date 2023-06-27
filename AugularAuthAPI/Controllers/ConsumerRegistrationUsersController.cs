@@ -86,7 +86,69 @@ namespace AugularAuthAPI.Controllers
                 throw ex;
             }
         }
+        //new codes goes here
+        [HttpPost("Consumer-Registration-User-Second")]
+        public async Task<IActionResult> ConsumerRegistrationUserSecondPost([FromBody] ConsumerRegistrationUsers ConsumerRegistrationUsersObj)
+        {
+            try
+            {
+                // check here weather object has data or not
+                if (ConsumerRegistrationUsersObj == null)
+                {
+                    return BadRequest();
+                }
+                // ckecking here Consumer Fullname Existed or blank
+                //if (ConsumerRegistrationUsersObj.ConsumerFullName == "")
+                //{
+                //    return BadRequest(new { Message = "Consumer Full Name Should not be Blank!!!" });
+                //}
 
+
+                //checking here Consumer Mobile Number Existed or blank
+                if (ConsumerRegistrationUsersObj.ConsumerMobileNumber == "")
+                {
+                    return BadRequest(new { Message = "Consumer Mobile Number Should not be Blank!!!" });
+                }
+                if (await CheckConsumerMobileNumberExistAsync(ConsumerRegistrationUsersObj.ConsumerMobileNumber))
+                {
+                    return BadRequest(new { Message = "Consumer Mobile Number Already Existed Found!!!" });
+                }
+                // checking Consuer Mobile number 10 digit or not
+                string CheckConsumerMobileNumberDigitTen = CheckConsumerMobileNumberDigitTenExistAsync(ConsumerRegistrationUsersObj.ConsumerMobileNumber);
+
+                if (CheckConsumerMobileNumberDigitTen.Length > 10)
+                {
+                    return BadRequest(new { Message = CheckConsumerMobileNumberDigitTen.ToString() });
+                }
+                if (ConsumerRegistrationUsersObj.ConsumerPassword == "")
+                {
+                    return BadRequest(new { Message = "Consumer Password Should not be Blank!!!" });
+                }
+                var CheckConsumerPasswordLengthStrength = CheckConsumerPasswordLengthStrengthAsync(ConsumerRegistrationUsersObj.ConsumerPassword);
+
+                if (!string.IsNullOrEmpty(CheckConsumerPasswordLengthStrength))
+                {
+                    return BadRequest(new { Message = CheckConsumerPasswordLengthStrength.ToString() });
+                }
+                // hashing ConsumerPassword Before Saving into DB
+                ConsumerRegistrationUsersObj.ConsumerPassword = PasswordHasher.HashPassword(ConsumerRegistrationUsersObj.ConsumerPassword);
+                ConsumerRegistrationUsersObj.ConsumerRole = "ConsumerRole";
+                ConsumerRegistrationUsersObj.CousumerToken = "";
+
+                //inserting details in DB Table
+                await _authContext.ConsumerRegistrationUsers.AddAsync(ConsumerRegistrationUsersObj);
+                await _authContext.SaveChangesAsync();
+                // Return a successful response indicating successful user registration
+                return Ok(new
+                {
+                    Message = "Consumer Successfull Registered!"
+                });
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         private async Task<bool> CheckConsumerMobileNumberExistAsync(string ConsumerMobileNumber)
         {
             return await _authContext.ConsumerRegistrationUsers.AnyAsync(x => x.ConsumerMobileNumber == ConsumerMobileNumber);
