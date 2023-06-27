@@ -47,32 +47,32 @@ export class LoginComponent {
   }
 
   // Handle the login button click event
-  onLogin() {
-    // If the form is valid, send the loginForm value to the server
-    if (this.loginForm.valid) {
-      this.auth.login(this.loginForm.value).subscribe({
-        next: (res) => {
-          this.loginForm.reset();
-          this.auth.storeToken(res.accessToken)
-          this.auth.storeRefreshToken(res.refreshToken)
-          const tokenPayload = this.auth.decodedToken()
-          this.userStore.setFullNameForStore(tokenPayload.name)
-          this.userStore.setFullNameForStore(tokenPayload.role)
-          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
-          this.router.navigate(['dashboard'])
-        },
-        error: (err) => {
-          // alert(err?.error.message);
-          this.toast.error({ detail: "ERROR", summary: err.message + "Something went wrong", duration: 4000 })
-        }
-      });
-    }
-    // If the form is invalid, show an error message and mark required fields as dirty
-    else {
-      this.validateAllFormFields(this.loginForm);
-      alert('The form is invalid');
-    }
-  }
+  // onLogin() {
+  //   // If the form is valid, send the loginForm value to the server
+  //   if (this.loginForm.valid) {
+  //     this.auth.login(this.loginForm.value).subscribe({
+  //       next: (res) => {
+  //         this.loginForm.reset();
+  //         this.auth.storeToken(res.accessToken)
+  //         this.auth.storeRefreshToken(res.refreshToken)
+  //         const tokenPayload = this.auth.decodedToken()
+  //         this.userStore.setFullNameForStore(tokenPayload.name)
+  //         this.userStore.setFullNameForStore(tokenPayload.role)
+  //         this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
+  //         this.router.navigate(['dashboard'])
+  //       },
+  //       error: (err) => {
+  //         // alert(err?.error.message);
+  //         this.toast.error({ detail: "ERROR", summary: err.message + "Something went wrong", duration: 4000 })
+  //       }
+  //     });
+  //   }
+  //   // If the form is invalid, show an error message and mark required fields as dirty
+  //   else {
+  //     this.validateAllFormFields(this.loginForm);
+  //     alert('The form is invalid');
+  //   }
+  // }
   onConsumerRegistratedUserLogin() {
     if (this.consumerRegistrationlogin.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsLogin(this.consumerRegistrationlogin.value).subscribe({
@@ -94,7 +94,10 @@ export class LoginComponent {
     }
     else {
       this.validateAllFormFields(this.consumerRegistrationlogin);
-      alert('The form is invalid');
+      if (!this.consumerRegistrationlogin.valid)
+      {
+        this.toast.warning({detail: "WARNING", summary:  "The form is Invalid !!!", duration: 4000})
+      }
     }
   }
 
