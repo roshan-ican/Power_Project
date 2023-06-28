@@ -38,6 +38,9 @@ export class LoginComponent {
   type: string = "password";
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash";
+  public resetPasswordNumber!:string;
+  public isValidNumber!:boolean;
+
 
   // Toggle between showing and hiding the password
   hideShowPass() {
