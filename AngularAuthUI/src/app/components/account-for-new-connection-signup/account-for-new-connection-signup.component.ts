@@ -32,28 +32,7 @@ export class AccountForNewConnectionSignupComponent {
     this.isText ? this.eyeIcon = "fa-eye" : this.eyeIcon = "fa-eye-slash"
     this.isText ? this.type = "text" : this.type = "password"
   }
-
-  // onSubmittingConsumerRegistrationForm() {
-  //   if (this.consumerRegistrationSignup.valid) {
-  //     this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({
-  //       next: (res => {
-  //         this.consumerRegistrationSignup.reset();
-  //         this.toast.success({ detail: "Sucessfully", summary: res.message, duration: 5000 })
-  //         this.router.navigate(['login']);
-  //       }),
-  //       error: ((err: any) => {
-  //         this.toast.error({ detail: 'Warning', summary: "Something went wrong", duration: 5000 })
-  //       })
-  //     })
-  //   }
-  //   else {
-  //     this.validateAllFormFields(this.consumerRegistrationSignup);
-  //     if (!this.consumerRegistrationSignup.valid)
-  //     {
-  //       this.toast.warning({detail: "WARNING", summary:  "The form is Invalid !!!", duration: 4000})
-  //     }
-  //   }
-  // }
+  
   onSubmittingConsumerRegistrationForm() {
     if (this.consumerRegistrationSignup.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({

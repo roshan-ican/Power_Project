@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { NgToastService } from 'ng-angular-popup';
 import ValidateForms from 'src/app/helpers/validateForms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-account-create-signup',
@@ -35,20 +36,22 @@ export class AccountCreateSignupComponent {
   }
   onSubmittingConsumerRegistrationForm() {
     if (this.consumerRegistrationSignup.valid) {
-      this.auth.onSubmittingConsumerCreateAccountFormsignUp(this.consumerRegistrationSignup.value).subscribe({
+      this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({
         next: (res => {
+          var showConsumerMobileNumber = this.consumerRegistrationSignup.value['consumerMobileNumber'];
           this.consumerRegistrationSignup.reset();
-          this.toast.success({ detail: "Sucessfully", summary: res.message, duration: 5000 })
+          Swal.fire('SUCCESS', 'Your account has been successfully created!\n User ID: '+ showConsumerMobileNumber, 'success');
           this.router.navigate(['login']);
         }),
         error: ((err: any) => {
-          this.toast.error({ detail: 'Warning', summary: "Something went wrong", duration: 5000 })
+          this.toast.error({ detail: 'Warning', summary: "Something went wrong", duration: 5000 });
         })
-      })
-    }
-    else {
+      });
+    } else {
       this.validateAllFormFields(this.consumerRegistrationSignup);
-      alert("Please Provides Us Valid Entries");
+      if (!this.consumerRegistrationSignup.valid) {
+        this.toast.warning({ detail: "WARNING", summary: "The form is Invalid !!!", duration: 4000 });
+      }
     }
   }
   private validateAllFormFields(formGroup: FormGroup) {

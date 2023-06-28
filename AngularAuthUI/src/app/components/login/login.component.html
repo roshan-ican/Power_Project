@@ -45,7 +45,7 @@
                                 *ngIf="consumerRegistrationlogin.controls['ConsumerPassword'].dirty && consumerRegistrationlogin.hasError('required', 'ConsumerPassword')"
                                 class="text-danger">*Consumer Password is required
                             </small>
-                            
+
                             <div class="form-inline fr mt-4">
                                 <a id="forget" data-bs-toggle="modal" data-bs-target="#modal"
                                     class="font-weight-bold">Forget Password ?</a>
@@ -56,7 +56,8 @@
                             </button>
 
                             <div class="text-center pt-4 text-muted">
-                                <a id="signup" routerLink="/account-for-new-connection-signup">Application for New Connection</a>
+                                <a id="signup" routerLink="/account-for-new-connection-signup">Application for New
+                                    Connection</a>
                             </div>
                             <div class="text-center pt-4 text-muted">
                                 <a id="signup" routerLink="/account-create-signup">Create Account</a>
@@ -73,26 +74,51 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="passwordModal">Forget Password ?</h5>
+                <!-- <h5 class="modal-title" id="passwordModal">Forget Password ?</h5> -->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>
-                    <span style="font-size: 25px; font-weight: 700;">Forget Password ?</span>
+                    <span style="font-size: 25px; font-weight: 700;" class="text-teal-400">Forget Password ?</span>
                     <br>
-                    <small>Please provide your registered mobile number. We will send the reset link.</small>
+                    <small>Enter Registered Mobile Number</small>
                 </p>
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <div class="input-field">
                         <span class="fa fa-user p-2"></span>
-                        <input type="text" class="form-control" placeholder="Phone number">
+                        <input type="text" class="form-control" placeholder="Mobile Number *">
                     </div>
                 </div>
-                <small class="text-danger">* Phone number is required</small>
+                <small class="text-danger">* Phone number is required</small> -->
+                <div class="panel-body p-3">
+                    <form [formGroup]="consumerRegistrationlogin">
+                        <div class="form-group pt-3">
+                            <div class="input-field"
+                                [class.error]="consumerRegistrationlogin.controls['ConsumerMobileNumber'].dirty && consumerRegistrationlogin.hasError('required', 'ConsumerMobileNumber')">
+                                <span class="fa fa-lock p-2"> </span>
+                                <input formControlName="ConsumerMobileNumber" minlength="10" maxlength="10" type="tel"
+                                    placeholder="ConsumerMobileNumber *"
+                                    class="rounded w-full focus:ring form-control form-control-sm ng-pristine ng-invalid ng-touched">
+                            </div>
+                        </div>
+                        <small
+                            *ngIf="consumerRegistrationlogin.controls['ConsumerMobileNumber'].dirty && consumerRegistrationlogin.hasError('required', 'ConsumerMobileNumber')"
+                            class="text-danger">*Consumer Registered User Id is required
+                        </small>
+                        <!-- <button type="button" class="btn btn-primary rounded text-white bg-blue-600">Send</button> -->
+
+                        <button (click)="onConsumerSubmittingSendVerificationCode()"
+                                class="btn btn-primary btn-block mt-4 w-100 rounded-2 bg-[#007bff]">
+                                Send Verification Code
+                            </button>
+
+                    </form>
+                </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary rounded text-white bg-gray-400" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary rounded text-white bg-blue-600">Send</button>
+                <button type="button" class="btn btn-secondary rounded text-white bg-gray-400"
+                    data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

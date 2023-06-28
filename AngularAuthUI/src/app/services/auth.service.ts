@@ -29,6 +29,11 @@ export class AuthService {
   {
     return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User-Authenticate`, ConsumerRegistrationFormsloginObj)
   }
+  onSubmittingConsumerSendVerificationCode(ConsumerSendVerificationCode: any[])
+  {
+    return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User-Authenticate`, ConsumerSendVerificationCode)
+  }
+
 
 
   signUp(userObj:any) {
