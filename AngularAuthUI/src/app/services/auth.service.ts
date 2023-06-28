@@ -22,6 +22,9 @@ export class AuthService {
    onSubmittingConsumerRegistrationFormsignUp(ConsumerRegistrationForms:any) {
     return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User`, ConsumerRegistrationForms)
   }
+  onSubmittingConsumerCreateAccountFormsignUp(ConsumerRegistrationForms:any) {
+    return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User-second`, ConsumerRegistrationForms)
+  }
   onSubmittingConsumerRegistrationFormsLogin(ConsumerRegistrationFormsloginObj: any[])
   {
     return this.http.post<any>(`${this.secondbaseUrl}Consumer-Registration-User-Authenticate`, ConsumerRegistrationFormsloginObj)
