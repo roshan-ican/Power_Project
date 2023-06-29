@@ -38,8 +38,8 @@ export class LoginComponent {
   type: string = "password";
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash";
-  public resetPasswordNumber!:string;
-  public isValidNumber!:boolean;
+  public resetPasswordNumber!: string;
+  public isValidNumber!: boolean;
 
 
   // Toggle between showing and hiding the password
@@ -60,7 +60,9 @@ export class LoginComponent {
           const tokenPayload = this.auth.decodedToken();
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
           this.userStore.setConsumerRoleForStore(tokenPayload.ConsumerRole)
-          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
+          this.toast.info({ detail: "INFORMATION", summary: "Dashboard Redirected Successfully", duration: 4000 })
+          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+          this.router.onSameUrlNavigation = 'reload';
           this.router.navigate(['dashboard'])
         },
         error: (err) => {
