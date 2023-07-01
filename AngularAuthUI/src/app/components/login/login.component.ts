@@ -16,6 +16,9 @@ export class LoginComponent {
   loginForm!: FormGroup;
   consumerRegistrationlogin!: FormGroup;
 
+  // RESET PASSWORD
+
+
   constructor(private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
@@ -33,6 +36,7 @@ export class LoginComponent {
       ConsumerMobileNumber: ['', Validators.required],
       ConsumerPassword: ['', Validators.required]
     })
+    
   }
 
   type: string = "password";
@@ -89,23 +93,43 @@ export class LoginComponent {
   }
 
   //onclicksendverification code on consumer Registred mobile number
-  onConsumerSubmittingSendVerificationCode() {
-    if (this.consumerRegistrationlogin.valid) {
-      this.auth.onSubmittingConsumerSendVerificationCode(this.consumerRegistrationlogin.value).subscribe({
-        next: (res: any[]) => {
-          console.warn(res);
-          this.consumerRegistrationlogin.reset();
-        },
-        error: (err: any[]) => {
-          this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })
-        }
-      })
-    }
-    else {
-      this.validateAllFormFields(this.consumerRegistrationlogin);
-      if (!this.consumerRegistrationlogin.valid) {
-        this.toast.warning({ detail: "WARNING", summary: "The form is Invalid !!!", duration: 4000 })
-      }
-    }
+  // onConsumerSubmittingSendVerificationCode() {
+  //   if (this.consumerRegistrationlogin.valid) {
+  //     this.auth.onSubmittingConsumerSendVerificationCode(this.consumerRegistrationlogin.value).subscribe({
+  //       next: (res: any[]) => {
+  //         console.warn(res);
+  //         this.consumerRegistrationlogin.reset();
+  //       },
+  //       error: (err: any[]) => {
+  //         this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })
+  //       }
+  //     })
+  //   }
+  //   else {
+  //     this.validateAllFormFields(this.consumerRegistrationlogin);
+  //     if (!this.consumerRegistrationlogin.valid) {
+  //       this.toast.warning({ detail: "WARNING", summary: "The form is Invalid !!!", duration: 4000 })
+  //     }
+  //   }
+  // }
+
+checkValidPhoneNumber(event: string) {
+  // Perform phone number validation logic
+  const phoneNumber = event.trim(); // Remove leading/trailing whitespace
+  const phoneNumberPattern = /^\d{10}$/; // Assumes a 10-digit phone number
+  this.isValidNumber = phoneNumberPattern.test(phoneNumber);
+  // Output validation result
+  return this.isValidNumber
+}
+
+confirmToSend(){
+  if(this.checkValidPhoneNumber(this.resetPasswordNumber)){
+    console.log(this.resetPasswordNumber);
+    this.resetPasswordNumber = "";
+    const buttonRef = document.getElementById("closeBtn")
+    buttonRef?.click()
+    // API CALL NEED TO BE DONE
   }
+} 
+
 }
