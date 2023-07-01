@@ -12,6 +12,7 @@ import { NgToastModule } from 'ng-angular-popup' // to be added
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { AccountForNewConnectionSignupComponent } from './components/account-for-new-connection-signup/account-for-new-connection-signup.component';
 import { AccountCreateSignupComponent } from './components/account-create-signup/account-create-signup.component';
+import { MenuSidebarComponent } from './menu-sidebar/menu-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { AccountCreateSignupComponent } from './components/account-create-signup
     SignupComponent,
     DashboardComponent,
     AccountForNewConnectionSignupComponent,
-    AccountCreateSignupComponent
+    AccountCreateSignupComponent,
+    MenuSidebarComponent
   ],
   imports: [
     BrowserModule,

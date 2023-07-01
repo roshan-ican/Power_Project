@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import ValidateForms from 'src/app/helpers/validateForms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -61,9 +61,8 @@ export class LoginComponent {
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
           this.userStore.setConsumerRoleForStore(tokenPayload.ConsumerRole)
           this.toast.info({ detail: "INFORMATION", summary: "Dashboard Redirected Successfully", duration: 4000 })
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
-          this.router.navigate(['dashboard'])
+          const navigationExtras: NavigationExtras = { state: { reload: true } };
+          this.router.navigateByUrl('/dashboard', navigationExtras);
         },
         error: (err) => {
           this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })

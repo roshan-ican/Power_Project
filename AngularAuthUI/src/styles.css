@@ -5,3 +5,97 @@
 /* @import '~bootstrap/dist/css/bootstrap.min.css'; */
 @import url(assets/css/common.css);
 
+/* You can add global styles to this file, and also import other style files */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #c4c4c4;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: #938e8e;
+  border-radius: 100vh;
+}
+
+  body::-webkit-scrollbar-thumb:hover {
+    background: #938e8e;
+  }
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #c4c4c4;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #938e8e;
+  border-radius: 100vh;
+}
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #938e8e;
+  }
+  
+  .form-table {
+    position: relative;
+    text-align: center;
+}
+.form-table :where(thead,tfoot) :where(th,td) {
+    --tw-bg-opacity: 1;
+    background-color: hsl(var(--b2, var(--b1)) / var(--tw-bg-opacity));
+    font-size: .75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.form-table :where(thead,tfoot) :where(th,td):first-child {
+    border-top-left-radius: .5rem;
+    border-bottom-left-radius: .5rem;
+}
+.form-table :where(thead,tfoot) :where(th,td):last-child {
+    border-top-right-radius: .5rem;
+    border-bottom-right-radius: .5rem;
+}
+.form-table :where(tbody th,tbody td) {
+    --tw-bg-opacity: 1;
+    background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+}
+.form-table {
+    display: table;
+}
+
+i{
+    cursor: pointer;
+}
+
+.ngx-pagination{
+  transform: scale(0.8);
+}
+
+.ngx-pagination .current{
+  background: #673ab7 !important;
+}
+
+.ngx-pagination .current,
+.btn-info {
+  background: #673ab7 !important;
+}
+
+.ngx-pagination .current:hover {
+  background: #673ab7 !important;
+}
+.modal-box{
+  width: 57rem !important;
+  max-width: 58rem !important;
+}
