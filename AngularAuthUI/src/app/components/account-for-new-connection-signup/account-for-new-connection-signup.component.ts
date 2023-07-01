@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import ValidateForms from 'src/app/helpers/validateForms';
@@ -21,9 +21,13 @@ export class AccountForNewConnectionSignupComponent {
       consumerMobileNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
       consumerAddress: [],
       consumerPassword: ['', Validators.required],
-      consumerRetypePassword: ['', Validators.required]
-    })
+      consumerRetypePassword: ['', Validators.required],
+    },
+      {
+
+      })
   }
+  consumerPasswordMismatch: any;
   type: string = "password"
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash"
@@ -33,25 +37,38 @@ export class AccountForNewConnectionSignupComponent {
     this.isText ? this.type = "text" : this.type = "password"
   }
   
+  matchPasswordConsumer() {
+    debugger
+    if (this.consumerRegistrationSignup.value['consumerPassword'] && this.consumerRegistrationSignup.value['consumerRetypePassword']
+      && this.consumerRegistrationSignup.value['consumerPassword'] != this.consumerRegistrationSignup.value['consumerRetypePassword']) {
+      this.toast.info({ detail: "INFO", summary: "Passwords Does Not Matched!", duration: 4000 })
+    }
+    else {
+      this.onSubmittingConsumerRegistrationForm();
+    }
+  }
+
+
   onSubmittingConsumerRegistrationForm() {
+    debugger
     if (this.consumerRegistrationSignup.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({
         next: (res => {
-          console.warn();
+          console.warn(res);
           var showConsumerMobileNumber = this.consumerRegistrationSignup.value['consumerMobileNumber'];
           this.consumerRegistrationSignup.reset();
-          Swal.fire('SUCCESS', 'Your account has been successfully created!\n User ID: '+ showConsumerMobileNumber, 'success');
+          Swal.fire('SUCCESS', 'Your account has been successfully created!\n User ID: ' + showConsumerMobileNumber, 'success');
           this.router.navigate(['login']);
         }),
         error: ((err: any) => {
           this.toast.error({ detail: 'Warning', summary: "Something went wrong", duration: 5000 });
         })
       });
-    } else {
+    }
+
+    else {
       this.validateAllFormFields(this.consumerRegistrationSignup);
-      if (!this.consumerRegistrationSignup.valid) {
-        this.toast.warning({ detail: "WARNING", summary: "The form is Invalid !!!", duration: 4000 });
-      }
+      alert("The Form Data is in-valid")
     }
   }
   private validateAllFormFields(formGroup: FormGroup) {

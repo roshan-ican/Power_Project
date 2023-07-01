@@ -165,7 +165,7 @@
                     <table class="table table-striped table-sm">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
+                                <th scope="col">User ID</th>
                                 <th scope="col">Consumer FullName</th>
                                 <th scope="col">Consumer ContractAccountNumber</th>
                                 <th scope="col">Consumer MobileNumber</th>
@@ -174,7 +174,7 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let user of users; let i= index">
-                                <td>{{user.consumerRegistrationId}}</td>
+                                <td>{{user.consumerMobileNumber}}</td>
                                 <td>{{user.consumerFullName}}</td>
                                 <td>{{user.consumerContractAccountNumber}}</td>
                                 <td>{{user.consumerMobileNumber}}</td>

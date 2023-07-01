@@ -34,6 +34,16 @@ export class AccountCreateSignupComponent {
     this.isText ? this.eyeIcon = "fa-eye" : this.eyeIcon = "fa-eye-slash"
     this.isText ? this.type = "text" : this.type = "password"
   }
+  matchPasswordConsumer() {
+    debugger
+    if (this.consumerRegistrationSignup.value['consumerPassword'] && this.consumerRegistrationSignup.value['consumerRetypePassword']
+      && this.consumerRegistrationSignup.value['consumerPassword'] != this.consumerRegistrationSignup.value['consumerRetypePassword']) {
+      this.toast.info({ detail: "INFO", summary: "Passwords Does Not Matched!", duration: 4000 })
+    }
+    else {
+      this.onSubmittingConsumerRegistrationForm();
+    }
+  }
   onSubmittingConsumerRegistrationForm() {
     if (this.consumerRegistrationSignup.valid) {
       this.auth.onSubmittingConsumerRegistrationFormsignUp(this.consumerRegistrationSignup.value).subscribe({
@@ -49,9 +59,7 @@ export class AccountCreateSignupComponent {
       });
     } else {
       this.validateAllFormFields(this.consumerRegistrationSignup);
-      if (!this.consumerRegistrationSignup.valid) {
-        this.toast.warning({ detail: "WARNING", summary: "The form is Invalid !!!", duration: 4000 });
-      }
+      alert("The Form Data is in-valid")
     }
   }
   private validateAllFormFields(formGroup: FormGroup) {

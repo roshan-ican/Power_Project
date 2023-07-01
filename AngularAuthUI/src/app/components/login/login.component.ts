@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import ValidateForms from 'src/app/helpers/validateForms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -42,8 +42,8 @@ export class LoginComponent {
   type: string = "password";
   isText: boolean = false;
   eyeIcon: string = "fa-eye-slash";
-  public resetPasswordNumber!:string;
-  public isValidNumber!:boolean;
+  public resetPasswordNumber!: string;
+  public isValidNumber!: boolean;
 
 
   // Toggle between showing and hiding the password
@@ -64,8 +64,9 @@ export class LoginComponent {
           const tokenPayload = this.auth.decodedToken();
           this.userStore.setConsumerUserIdFromStore(tokenPayload.ConsumerMobileNumber)
           this.userStore.setConsumerRoleForStore(tokenPayload.ConsumerRole)
-          this.toast.success({ detail: "SUCCESS", summary: res.message, duration: 4000 })
-          this.router.navigate(['dashboard'])
+          this.toast.info({ detail: "INFORMATION", summary: "Dashboard Redirected Successfully", duration: 4000 })
+          const navigationExtras: NavigationExtras = { state: { reload: true } };
+          this.router.navigateByUrl('/dashboard', navigationExtras);
         },
         error: (err) => {
           this.toast.error({ detail: "ERROR", summary: "Something went wrong", duration: 4000 })

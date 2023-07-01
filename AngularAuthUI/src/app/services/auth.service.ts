@@ -71,13 +71,10 @@ export class AuthService {
 
     const jwtHelper = new JwtHelperService()
     const token = this.getToken()!;
-    console.log(token)
-    console.log(jwtHelper.decodeToken(token));
     return  jwtHelper.decodeToken(token)
   }
   getfullnameFromToken() {
     if(this.userPayload)
-    console.log(this.userPayload, 'MAAL');
     return this.userPayload.name;
   }
 

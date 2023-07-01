@@ -19,7 +19,6 @@ export class DashboardComponent {
     this.api.getCustomerUsers()
       .subscribe(res => {
         this.users = res;
-        console.log(res,"MAAL");
       })
     this.userStore.getFullNameFromStore().subscribe(val => {
       let fullNameFromToken = this.auth.getfullnameFromToken();
